@@ -31,25 +31,13 @@ int main(int argc, char *argv[])
 {
   int i;
   n = argc - 1;
-  printf("n = %d\n", n);
 
   int A[n];
 
   for (i = 1; i < argc; i++)
     A[i - 1] = atoi(argv[i]);
 
-  printf("A[] =");
-  for (i = 0; i < n; i++)
-    printf(" %d", A[i]);
-  printf("\n");
-
   bucket_sort(A); // 配列A[0]からA[n-1]のバケットソート
-
-  printf("A[] =");
-  for (i = 0; i < n; i++)
-    printf(" %d", A[i]);
-  printf("\n");
-
   return 0;
 }
 
@@ -72,7 +60,6 @@ void enqueue(int i, int d)
     printf("Queue Overflow\n");
     exit(1);
   }
-  printf("Q[%d] ->", i);
   Q[i].data[Q[i].rear] = d;
   Q[i].rear = next(Q[i].rear);
 }
@@ -107,9 +94,24 @@ void bucket_sort(int *A)
   int i, j;
   init();
   for (i = 0; i < n; i = i + 1)
+  {
     enqueue(A[i], A[i]);
+  }
+  for (int bucket_num = 0; bucket_num < 10; bucket_num = bucket_num + 1)
+  {
+    printf("Q[%d]", bucket_num);
+    if(emptyqueue(bucket_num) == 0){
+      for (int k = 0; k < n; k = k + 1){
+        if(A[k] == bucket_num){
+          printf(" -> A[%d]", k);
+        }
+      }
+    }
+    printf("\n");
+  }
   for (i = 0, j = 0; j < M; j = j + 1)
   {
+    // Q[j]の中にある配列が空じゃない間回す
     while (emptyqueue(j) == 0)
     {
       A[i] = dequeue(j);
